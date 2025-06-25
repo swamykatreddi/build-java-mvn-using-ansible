@@ -1,0 +1,29 @@
+---
+- name: installing Java, Maven, and Git on Web Servers
+  hosts: webservers
+  become: true
+  tasks:
+     
+    - name: Install Java
+      apt:
+        name: openjdk-8-jdk
+        state: present
+    - name: Install Maven
+      apt:
+        name: maven
+        state: present
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+    - name: Ensure Java is installed
+      command: java -version
+    - name: clone git repository
+      git: 
+        repo: https://github.com/swamykatreddi/Ekart-java.git
+        dest: /opt/Ekart-java
+        version: main
+    - name: Build the project using Maven
+      command: mvn clean install
+      args:
+        chdir: /opt/Ekart-java
